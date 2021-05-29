@@ -294,11 +294,34 @@ AC saat Praktikum
 ### Bukti
 ![BUKTI](https://github.com/Doanda37Rahma/struktur-data-h-praktikum-4-2021/blob/main/img/cr_bukti.png)
 ### Penjelasan Soal
+Diberikan undirected unconnected graph dengan `T` vertex dan `L` edge yang direpresentasikan sebagai pulau dan jembatan yang menghubungkan. Program diminta mencari jumlah jembatan minimum untuk menghubungkan semua pulau.
 ### Penjelasan Solusi
+Karena graph undirected dan tidak terhubung (unconnected) maka DFS dapat digunakan untuk menghitung banyak rumpun node (pulau) yang terhubung. Dengan begitu, jumlah jembatan minimum adalah jumlah rumpun node dikurangi satu.
+
+
 ### Visualisasi Solusi
-
-
-
+Sample Input:
+```
+14 13 
+1 2
+1 3
+2 4
+3 4
+3 6
+5 6
+5 7
+6 8
+7 8
+9 10
+11 12 
+11 13
+12 13
+```
+Sample Output:
+```
+3
+```
+![VISUAL]()
 
 ## Sayonara   
 ### Verdict
