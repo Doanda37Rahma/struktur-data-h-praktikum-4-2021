@@ -92,8 +92,12 @@ Sample Output
 ```
 ![VISUAL](https://github.com/Doanda37Rahma/struktur-data-h-praktikum-4-2021/blob/main/img/mjn_visual.png)
 
-
-
+Berikut contoh visualisasi Prim's MST Algorithm:
+<!-- blank line -->
+<figure class="video_container">
+  <iframe src="https://www.youtube.com/embed/enMumwvLAug" frameborder="0" allowfullscreen="true"> </iframe>
+</figure>
+<!-- blank line -->
 
 ## Distribusi Vaksin
 ### Verdict
