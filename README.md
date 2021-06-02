@@ -17,7 +17,6 @@ Minimum Spanning Tree ditentukan menggunakan
 
 ### Fungsi `euclidean()`
 Menemukan jarak terdekat antara dua rumah dalam bidang kartesian
-_______________
 ![Euclid](https://www.researchgate.net/profile/Young-Sun-Lee-2/publication/263889770/figure/fig1/AS:890653479284740@1589359745492/An-example-of-Euclidean-distance-between-two-objects-on-variables-X-and-Y.png)
 ```
 double euclidean(double x1, double y1, double x2, double y2)
@@ -33,50 +32,84 @@ double euclidean(double x1, double y1, double x2, double y2)
 }
 ```
 
-### Fungsi `findCost`
+### Fungsi `findCost()`  
+Fungsi findCost mengaplikasikan Prim's MST untuk mencari biaya minimum.
+
+Setiap vertex memiliki 3 properti: 
+- Parent node tersebut `parent[v]`
+- Jarak untuk mencapai node tsb `costToReach[v]`
+- Apakah node tsb sudah masuk dalam MST `isIn[v]`
+Biaya minimum adalah jumlah jarak tiap node.
+
+Reference:
+- https://www.youtube.com/watch?v=cplfcGZmX7I
+- https://www.geeksforgeeks.org/prims-minimum-spanning-tree-mst-greedy-algo-5/
 ```
-void findCost(int n, vector<vector<double>> houses) {
+void findCost(int n, vector<vector<double>> houses) {  
     
     int parent[n];
     
-    double costToReach[n];
+    double costToReach[n];	
     
-    bool isIn[n];
+    bool isIn[n]; 
     
     for (int i = 0; i < n; i++) {
-        costToReach[i] = numeric_limits<double>::max();
-        isIn[i] = false;
+        costToReach[i] = numeric_limits<double>::max();  // pertama inisialisasi semua jarak tak hingga
+        isIn[i] = false;				 // belum ada yang dimasukkan ke MST
     }
     
-    parent[0] = -1;
-    costToReach[0] = 0;
+    parent[0] = -1;   	// berawal dari vertex 0 yang tidak memiliki parent
+    costToReach[0] = 0; // jarak dari vertex 0 ke 0 adalah 0
     
     for (int i = 0; i < n - 1; i++) {
     
-        int u = nearestNode(n, costToReach, isIn);
+        int u = nearestNode(n, costToReach, isIn);  // mencari node dengan costToReach terkecil yang belum masuk dalam MST
     
-        isIn[u] = true;
+        isIn[u] = true;  // memasukkan vertex u (neighbor terdekat) kedalam MST
     
-        for (int v = 0; v < n; v++) {
-            if (houses[u][v] && isIn[v] == false &&
-                houses[u][v] < costToReach[v]) {
-                costToReach[v] = houses[u][v];
-                parent[v] = u;
+        for (int v = 0; v < n; v++) {			// cek tiap vertex (representasi adj.matrix)
+            if (houses[u][v] && isIn[v] == false &&  	// jika menemukan neighbor dari u (v) yang belum masuk MST [menghindari cycle]
+                houses[u][v] < costToReach[v]) {	// jika edge u-v < jarak ke v 
+                costToReach[v] = houses[u][v];		// maka, jarak ke v = edge u-v	
+                parent[v] = u;				// parent v adalah u
             }
         }
     }
     
+    // mencari biaya minimum, menjumlahkan edge dari node dan parentnya
     double cost = 0;
-
-    for (int i = 1; i < n; i++)
-        cost += houses[parent[i]][i];
-    printf("%lf\n", cost);
+    for (int i = 1; i < n; i++)  // mulai dari vertex 1 (v0 tidak punya parent)
+        cost += houses[parent[i]][i]; 
+    printf("%lf\n", cost); 	// output
 }
 ```
+### Fungsi `nearestNode()`
+Prim's merupakan greedy algorithm, disini algoritma mengasumsikan bahwa untuk mencari hubungan dengan cost minimal, maka harus mengekspansi ke vertex dengan jarak minimum. (seperti dijkstra)
+Fungsi ini menentukan vertex mana yang harus diekspansikan selanjutnya, mencari vertex yang belum ada dalam MST dengann costToReach minimum
+```
+double nearestNode(int n, double costToReach[], bool isIn[]) {
+    double minDist = numeric_limits<double>::max(); 
+    int minIndex;
 
-
-
+    for (int i = 0; i < n; i++) {
+        if (isIn[i] == false && costToReach[i] < minDist) {
+            minDist = costToReach[i], minIndex = i;
+        }
+    }
+    return minIndex;
+}
+```
 ### Visualisasi Solusi
+Berikut contoh visualisasi Prim's MST Algorithm:
+- Dengan euclidean distance:
+
+![VISUAL](https://github.com/Doanda37Rahma/struktur-data-h-praktikum-4-2021/blob/main/img/PrimAlgDemo.gif)
+
+- Dengan weighted graph:
+
+![VISUAL](https://github.com/Doanda37Rahma/struktur-data-h-praktikum-4-2021/blob/main/img/prim_visual.gif)
+
+
 Sample Input 
 ```
 5
@@ -90,14 +123,16 @@ Sample Output
 ```
 18801687.039806
 ```
-![VISUAL](https://github.com/Doanda37Rahma/struktur-data-h-praktikum-4-2021/blob/main/img/mjn_visual.png)
 
-Berikut contoh visualisasi Prim's MST Algorithm:
-<!-- blank line -->
-<figure class="video_container">
-  <iframe src="https://www.youtube.com/embed/enMumwvLAug" frameborder="0" allowfullscreen="true"> </iframe>
-</figure>
-<!-- blank line -->
+
+
+
+
+
+
+
+
+
 
 ## Distribusi Vaksin
 ### Verdict
