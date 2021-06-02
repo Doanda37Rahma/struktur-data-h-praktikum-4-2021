@@ -399,11 +399,63 @@ AC saat Praktikum
 ### Penjelasan Soal
 Diberikan beberapa 8 angka puzzle yang belum terselesaikan. \
 Program diminta menentukan banyak langkah dan mencetak tiap langkah untuk menyelesaikan puzzle jika bisa, jika tidak keluarkan "Problem tidak dapat diselesaikan". \
+Berikut contoh initial state dan final state.\
 ![VISUAL](https://github.com/Doanda37Rahma/struktur-data-h-praktikum-4-2021/blob/main/img/puzzle.png)
 
 ### Penjelasan Solusi
 Setiap problem/puzzle direpresentasikan dengan 2d array
-Pertama program menentukan apakah bisa menyelesaikan puzzle. 8 angka puzzle dapat diselesaikan hanya jika jumlah inversi(pasangan yang urutannya terbalik) dari angka-angka adalah genap. 
+Pertama program menentukan apakah bisa menyelesaikan puzzle. 8 angka puzzle dapat diselesaikan hanya jika jumlah inversi(pasangan yang urutannya terbalik) dari angka-angka adalah genap, didapat dari `getInvCount()`. Kemudian menggunakan traversal BFS (fungsi `solve()`) untuk tiap langkah, menggeser blank dengan urutan langkah (atas, bawah, kanan , kiri) jika langkah legal (dengan func `isSafe()`). Pencarian dilakukan sampai final state. \
+Setiap state/node puzzle memiliki beberapa atribut: \
+- Reference ke parent node `Node* parent`
+- 2d array yang merepresentasikan papan 3x3 `mat[3][3]`
+- `x`, `y`, lokasi blank pada node 
+Jika sudah menemukan final state dengan fungsi `isMatched()`, maka menentukan langkah minimum `printMinSteps()` dan mencetak langkah `printSteps()`.
+### Fungsi `main()`
+```
+int main()
+{
+    char input[N][N];
+    int initial[N][N];
+    int lined[9];
+    int x, y;
+    int final[N][N] =	
+    {
+        {1, 2, 3},
+        {4, 5, 6},	// final state
+        {7, 8, 0}
+    };
+
+    while (scanf("%s", input[0]) != EOF) {  // input stops at EOF
+        scanf("%s", input[1]);
+        scanf("%s", input[2]);
+
+        for (int i = 0; i < N; ++i) {
+            for (int j = 0; j < N; ++j) {
+
+                initial[i][j] = input[i][j] - '0';   // konversi input string to int
+
+                if (initial[i][j] == 0) 
+                    x = i, y = j;	// find loc of blank
+
+                lined[i*3 + j] = initial[i][j];  // 2d to 1d array
+            }
+        }
+
+        int invCount = getInvCount(lined, 9);  // count inversions
+
+        if (invCount % 2 != 0) {   // jika tidak genap
+            cout << "Problem tidak dapat diselesaikan" << endl;
+            continue;
+        }
+
+        solve(initial, x, y, final); // jika genap, do BFS
+    }
+    
+    return 0;
+}
+
+```
+
 ### Fungsi `getInvCount()` 
 Mencari jumlah inversion.
 ```
@@ -418,14 +470,108 @@ int getInvCount(int arr[], int n)
     return inv_count;
 }
 ```
-Jika jumlah inversi ganjil, maka problem tidak bisa diselesaikan.
+### Fungsi `solve()`
+BFS untuk mencari final state.
 ```
-        if (invCount % 2 != 0) {
-            cout << "Problem tidak dapat diselesaikan" << endl;
-            continue;
+// BFS: atas, bawah, kanan, kiri 
+int row[] = { -1, 1, 0, 0 };
+int col[] = { 0, 0, 1, -1 };
+// BFS
+void solve(int initial[N][N], int x, int y,
+           int final[N][N])
+{
+    queue<Node*> q;  // queue, standard BFS
+ 
+    Node* root = newNode(initial, x, y, x, y, NULL);   // inisialisasi initial state
+ 
+    q.push(root);  
+    
+    bool flag = true;  // flag untuk menandakan node root/pertama, relevan dibawah
+
+    while (!q.empty())
+    {
+        Node* min = q.front();   // node yang dikembangkan 
+ 
+        q.pop();
+
+        if (isMatched(min->mat, final)) {  // cek apakah current state = final state
+            printMinSteps(min);
+            printPath(min, true);
+            return;
+        }
+ 
+        for (int i = 0; i < 4; i++)    // loop untuk mencoba menggeser blank dari current state ke 4 arah, 
+        {
+            if (isSafe(min->x + row[i], min->y + col[i]))  // memastikan state selalu legal, (menghindari array out of bounds error)
+            {
+                Node* child = newNode(min->mat, min->x,  // menciptakan node yang akan dikembangkan selanjutnya
+                              min->y, min->x + row[i],	
+                              min->y + col[i], min);
+
+                if (!flag) 	// flag = 0 jika bukan node root, maka node memiliki parent (menghindari null pointer error)
+                    if (child->parent->parent->x == child->x &&  // kita tidak mau traverse ke yang baru saja kita lewati (parent node),
+                        child->parent->parent->y == child->y)    // maka cek koordinat current node's child and parent jika sama
+                        continue;
+                q.push(child);
+            }
+        }
+        flag = false; // setelah root terlewati, turunkan flag
+    }
+}
 ```
+### Fungsi `newNode()`
+Menciptakan instance node/state dengan lokasi blank dan salah satu angka (atas/bawah/kanan/kirinya) tertukar
+```
+Node* newNode(int mat[N][N], int x, int y, int newX,
+              int newY, Node* parent)
+{
+    Node* node = new Node;
+    node->parent = parent;
+    memcpy(node->mat, mat, sizeof node->mat);      // copy value parent dan alokasikan memori ke node baru
+    swap(node->mat[x][y], node->mat[newX][newY]);  // tukar blank dengan angka
+    node->x = newX;  
+    node->y = newY;
+ 
+    return node;
+}
+```
+### Fungsi `isMatched()`
+Mengecek apakah dua matrix 3x3 puzzle sama
+```
+bool isMatched(int mata[N][N], int matb[N][N]) 
+{   
+    for (int i = 0; i < N; ++i)
+        for (int j = 0; j < N; ++j) 
+            if (mata[i][j] != matb[i][j])
+                return false;
+    return true;
+}
+```
+### Fungsi `printPath()` dan utility `printMatrix()`
+Mencetak matrix mulai dari ***langkah pertama*** sampai
+```
+void printPath(Node* root, bool isLast)
+{
+    if (root->parent == NULL)   
+        return;
+    printPath(root->parent, false);
+    printMatrix(root->mat);
+    if (!isLast)
+        printf("\n");
+}
 
-
-
+void printMatrix(int mat[N][N])
+{
+    for (int i = 0; i < N; i++)
+    {
+        for (int j = 0; j < N; j++)
+            printf("%d", mat[i][j]);
+        printf("\n");
+    }
+}
+```
+### Fungsi `printMinSteps()` dan utility `minSteps()`
+```
+```
 
 ### Visualisasi Solusi
