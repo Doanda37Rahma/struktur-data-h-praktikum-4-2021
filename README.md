@@ -1,7 +1,5 @@
 # struktur-data-h-praktikum-4-2021
 
-mjn dv rsk cr s pm
-
 ## Malur Javanese Ngulski 
 ### Verdict
 AC saat Praktikum
@@ -39,6 +37,7 @@ Setiap vertex memiliki 3 properti:
 - Parent node tersebut `parent[v]`
 - Jarak untuk mencapai node tsb `costToReach[v]`
 - Apakah node tsb sudah masuk dalam MST `isIn[v]`
+
 Biaya minimum adalah jumlah jarak tiap node.
 
 Reference:
@@ -443,7 +442,7 @@ Dalam papan tersebut, terbentuk dua deret aritmatika:
 
 - Dari corner kiri atas dan kanan bawah:
 
-![VISUAL](https://github.com/Doanda37Rahma/struktur-data-h-praktikum-4-2021/blob/main/img/sayonara_deret 2.png)
+![VISUAL](https://github.com/Doanda37Rahma/struktur-data-h-praktikum-4-2021/blob/main/img/sayonara_deret2.png)
 
 Dari kedua deret tersebut, dapat ditentukan jarak yang ditempuh antar corner, serta arahnya (dari paritas/ ganjil genap n).
 Kemudian membuat algoritme loop untuk mencetak output, yang berhenti setelah sampai `dest`.
@@ -605,7 +604,7 @@ bool isMatched(int mata[N][N], int matb[N][N])
 }
 ```
 ### Fungsi `printPath()` dan utility `printMatrix()`
-Mencetak matrix mulai dari ***langkah pertama*** sampai
+Mencetak matrix mulai dari ***langkah pertama*** sampai final state
 ```
 void printPath(Node* root, bool isLast)
 {
@@ -641,6 +640,7 @@ int minSteps(Node* root)
     return minSteps(root->parent) + 1;
 }
 ```
+https://www.geeksforgeeks.org/8-puzzle-problem-using-branch-and-bound/
 
 ### Visualisasi Solusi
 Sample Input 0
@@ -666,3 +666,4 @@ Langkah minimum = 2
 Problem tidak dapat diselesaikan
 ```
 ![VISUAL](https://github.com/Doanda37Rahma/struktur-data-h-praktikum-4-2021/blob/main/img/8puzzle.png)
+
