@@ -360,19 +360,36 @@ Sample Output:
 ```
 3
 ```
-![VISUAL]()
+![VISUAL](https://github.com/Doanda37Rahma/struktur-data-h-praktikum-4-2021/blob/main/img/unconnected_graph.jpg)
+![VISUAL](https://github.com/Doanda37Rahma/struktur-data-h-praktikum-4-2021/blob/main/img/unconnected_graph_1.jpg)
+
+
+
+
 
 ## Sayonara   
 ### Verdict
-AC saat Praktikum
+Wrong Answer
 ### Bukti
 ![BUKTI](https://github.com/Doanda37Rahma/struktur-data-h-praktikum-4-2021/blob/main/img/s_bukti.png)
 ### Penjelasan Soal
-### Penjelasan Solusi
-### Visualisasi Solusi
+![VISUAL](https://github.com/Doanda37Rahma/struktur-data-h-praktikum-4-2021/blob/main/img/sayonara_table.png) \
+Diberikan papan permainan seperti gambar. Program diminta mencetak langkah-langkah dari lokasi `P` ke `Q`. 
+Setiap langkah dengan format xY, x adalah jarak ditempuh, Y adalah arah.
+### Ide Solusi & Visualisasi
+Lokasi P dan Q direpresentasikan menjadi `src` dan `dest`. 
+Dalam papan tersebut, terbentuk dua deret aritmatika:
 
+- Dari setiap corner (tikungan) kanan atas dan kiri bawah:
 
+![VISUAL](https://github.com/Doanda37Rahma/struktur-data-h-praktikum-4-2021/blob/main/img/sayonara_deret.png)
 
+- Dari corner kiri atas dan kanan bawah:
+
+![VISUAL](https://github.com/Doanda37Rahma/struktur-data-h-praktikum-4-2021/blob/main/img/sayonara_deret 2.png)
+
+Dari kedua deret tersebut, dapat ditentukan jarak yang ditempuh antar corner, serta arahnya (dari paritas/ ganjil genap n).
+Kemudian membuat algoritme loop untuk mencetak output, yang berhenti setelah sampai `dest`.
 
 ## Puzzle MudMud 
 ### Verdict
@@ -380,5 +397,35 @@ AC saat Praktikum
 ### Bukti
 ![BUKTI](https://github.com/Doanda37Rahma/struktur-data-h-praktikum-4-2021/blob/main/img/pm_bukti.png)
 ### Penjelasan Soal
+Diberikan beberapa 8 angka puzzle yang belum terselesaikan. \
+Program diminta menentukan banyak langkah dan mencetak tiap langkah untuk menyelesaikan puzzle jika bisa, jika tidak keluarkan "Problem tidak dapat diselesaikan". \
+![VISUAL](https://github.com/Doanda37Rahma/struktur-data-h-praktikum-4-2021/blob/main/img/puzzle.png)
+
 ### Penjelasan Solusi
+Setiap problem/puzzle direpresentasikan dengan 2d array
+Pertama program menentukan apakah bisa menyelesaikan puzzle. 8 angka puzzle dapat diselesaikan hanya jika jumlah inversi(pasangan yang urutannya terbalik) dari angka-angka adalah genap. 
+### Fungsi `getInvCount()` 
+Mencari jumlah inversion.
+```
+int getInvCount(int arr[], int n)
+{
+    int inv_count = 0;
+    for (int i = 0; i < n - 1; i++)
+        for (int j = i + 1; j < n; j++)
+            if (arr[i] > arr[j] && arr[i] != 0 && arr[j] != 0)
+                inv_count++;
+ 
+    return inv_count;
+}
+```
+Jika jumlah inversi ganjil, maka problem tidak bisa diselesaikan.
+```
+        if (invCount % 2 != 0) {
+            cout << "Problem tidak dapat diselesaikan" << endl;
+            continue;
+```
+
+
+
+
 ### Visualisasi Solusi
