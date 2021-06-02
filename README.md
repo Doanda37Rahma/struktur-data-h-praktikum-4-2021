@@ -337,6 +337,63 @@ Diberikan undirected unconnected graph dengan `T` vertex dan `L` edge yang direp
 ### Penjelasan Solusi
 Karena graph undirected dan tidak terhubung (unconnected) maka DFS dapat digunakan untuk menghitung banyak rumpun node (pulau) yang terhubung. Dengan begitu, jumlah jembatan minimum adalah jumlah rumpun node dikurangi satu.
 
+### Fungsi `main()`
+```
+int main()
+{
+    int V, E;
+    cin >> V >> E;
+
+    Graph g(V);
+    int src, dest;
+    while (E--) {
+        cin >> src >> dest;
+        g.addEdge(src - 1, dest - 1);
+    }
+    int answer = g.countIsland() - 1;
+    cout << answer << endl;
+ 
+    return 0;
+}
+```
+### Fungsi `countIsland`
+Fungsi ini melakukan DFS / mencoba menginisialisasi DFS pada setiap vertex, \
+Pada setiap satu DFS yang berawal dari vertex u, akan menandakan semua yang terhubung dengan vertex u itu visited.\
+Maka `countIsland()` menghasilkan jumlah vertex group yang terisolasi
+```
+    int countIsland()
+    {
+        int result = 0;
+        bool visited[V];
+        for (int i = 0; i < V; i++)
+            visited[i] = false;
+    
+        for (int u = 0; u < V; u++)
+        {
+            if (!visited[u]) {
+                result += 1;
+                countIslandUtil(u, visited);
+            }
+        }
+        return result;
+    }
+
+    void countIslandUtil(int v, bool visited[])
+    {
+        
+        visited[v] = true;
+    
+        list<int>::iterator i;
+        for (i = adj[v].begin(); i != adj[v].end(); ++i)
+        {
+            if (!visited[*i])
+            {
+                countIslandUtil(*i, visited);
+            }   
+        }
+    }
+```
+
 
 ### Visualisasi Solusi
 Sample Input:
@@ -554,8 +611,8 @@ void printPath(Node* root, bool isLast)
 {
     if (root->parent == NULL)   
         return;
-    printPath(root->parent, false);
-    printMatrix(root->mat);
+    printPath(root->parent, false);  // rekur ke root child (seperti stack)  
+    printMatrix(root->mat);	     // print dari top stack
     if (!isLast)
         printf("\n");
 }
@@ -572,6 +629,40 @@ void printMatrix(int mat[N][N])
 ```
 ### Fungsi `printMinSteps()` dan utility `minSteps()`
 ```
+void printMinSteps(Node* root)
+{
+    int ans = minSteps(root);  //  linear traverse ke root, hitung banyak langkahnya 
+    cout << "Langkah minimum = " << ans << endl;  // output
+}
+
+int minSteps(Node* root) 
+{
+    if (root->parent == NULL) return 0;
+    return minSteps(root->parent) + 1;
+}
 ```
 
 ### Visualisasi Solusi
+Sample Input 0
+```
+123
+456
+078
+
+012
+345
+687
+```
+Sample Output 0
+```
+Langkah minimum = 2
+123
+456
+708
+
+123
+456
+780
+Problem tidak dapat diselesaikan
+```
+![VISUAL](https://github.com/Doanda37Rahma/struktur-data-h-praktikum-4-2021/blob/main/img/8puzzle.png)
