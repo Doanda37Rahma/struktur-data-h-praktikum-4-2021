@@ -239,6 +239,12 @@ Sample Output
 ```
 58
 ```
+![VISUAL](https://github.com/Doanda37Rahma/struktur-data-h-praktikum-4-2021/blob/main/img/dijkstra1.png)
+![VISUAL](https://github.com/Doanda37Rahma/struktur-data-h-praktikum-4-2021/blob/main/img/dijkstra2.png)
+![VISUAL](https://github.com/Doanda37Rahma/struktur-data-h-praktikum-4-2021/blob/main/img/dijkstra3.png)
+![VISUAL](https://github.com/Doanda37Rahma/struktur-data-h-praktikum-4-2021/blob/main/img/dijkstra4.png)
+![VISUAL](https://github.com/Doanda37Rahma/struktur-data-h-praktikum-4-2021/blob/main/img/dijkstra5.png)
+
 
 
 ## Roy sang kurir 
